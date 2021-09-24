@@ -1,34 +1,53 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Navigation } from './components/Navigation/Navigation';
 import { NotFound } from './components/NotFound/NotFound';
-import MoviesPage from './views/MoviesPage';
+import { searchMovies } from './api/fetchMovies';
 
 const HomePage = lazy(() =>
   import('./views/HomePage' /* webpackChunkName: 'homePage' */),
 );
+const MoviesPage = lazy(() =>
+  import('./views/MoviesPage' /* webpackChunkName: 'moviesPage' */),
+);
+const MovieDetailsPage = lazy(() =>
+  import('./views/MovieDetailsPage' /* webpackChunkName: 'movieDetailsPage' */),
+);
 
 const App = () => {
-  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [movies, setMovies] = useState([]);
+  const [query, setQuery] = useState(null);
 
-  const onSelectMovie = id => {
-    setSelectedMovie(id);
+  const handleQuery = query => {
+    setQuery(query);
   };
+
+  useEffect(() => {
+    if (query < 1) {
+      return;
+    }
+    searchMovies(query).then(setMovies);
+  }, [query]);
+
+  const resetSearch = useCallback(() => {
+    setMovies([]);
+    setQuery(null);
+  }, []);
 
   return (
     <>
       <Navigation />
-      <Suspense fallback={'Downloading...'}>
+      <Suspense fallback={<h1>Downloading...</h1>}>
         <Switch>
           <Route path="/" exact>
-            <HomePage onSelectMovie={onSelectMovie} />
+            <HomePage resetSearch={resetSearch} />
           </Route>
           <Route path="/movies" exact>
-            <MoviesPage onSelectMovie={onSelectMovie} />
+            <MoviesPage handleQuery={handleQuery} movies={movies} />
           </Route>
-          {/*<Route path="/movies/:id">*/}
-          {/*  <HomePage />*/}
-          {/*</Route>*/}
+          <Route path="/movies/:movieId">
+            <MovieDetailsPage />
+          </Route>
           <Route>
             <NotFound />
           </Route>
