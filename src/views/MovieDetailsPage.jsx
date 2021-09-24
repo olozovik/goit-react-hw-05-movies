@@ -13,6 +13,7 @@ import { MainContent } from '../components/MovieDetails/MainContent/MainContent'
 import { MovieDescription } from '../components/MovieDetails/MovieDescription/MovieDescription';
 import { AdditionalInfo } from '../components/MovieDetails/AdditionalInfo/AdditionalInfo';
 import { Cast } from '../components/MovieDetails/Cast/Cast';
+import { Reviews } from '../components/MovieDetails/Reviews/Reviews';
 
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500/';
 
@@ -23,7 +24,8 @@ const MovieDetailsPage = () => {
   const [userScore, setUserScore] = useState(null);
   const [overview, setOverView] = useState(null);
   const [genres, setGenres] = useState(null);
-  const [cast, setCast] = useState([]);
+  const [cast, setCast] = useState(null);
+  const [reviews, setReviews] = useState(null);
 
   const { movieId } = useParams();
   const { path } = useRouteMatch();
@@ -40,8 +42,8 @@ const MovieDetailsPage = () => {
         overview,
         genres,
         credits,
+        reviews,
       } = data;
-      // console.log(data);
       setImage(poster_path);
       setTitle(title);
       setReleaseYear(Number.parseInt(release_date));
@@ -49,6 +51,7 @@ const MovieDetailsPage = () => {
       setOverView(overview);
       setGenres(genres.map(genre => genre.name).join(', '));
       setCast(credits.cast);
+      setReviews(reviews.results);
     });
   }, [movieId]);
 
@@ -74,6 +77,9 @@ const MovieDetailsPage = () => {
       <AdditionalInfo />
       <Route path={`${path}/cast`}>
         <Cast cast={cast} />
+      </Route>
+      <Route path={`${path}/reviews`}>
+        <Reviews reviews={reviews} />
       </Route>
     </Container>
   );
