@@ -1,5 +1,7 @@
+import PropTypes from 'prop-types';
+
 const Reviews = ({ reviews }) => {
-  return reviews ? (
+  return reviews.length ? (
     <ul>
       {reviews.map((review, idx) => {
         const { author, content } = review;
@@ -14,6 +16,10 @@ const Reviews = ({ reviews }) => {
   ) : (
     <p>We don't have any reviews for this movie.</p>
   );
+};
+
+Reviews.propTypes = {
+  reviews: PropTypes.arrayOf(PropTypes.object),
 };
 
 export { Reviews };

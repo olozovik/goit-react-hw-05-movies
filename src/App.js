@@ -2,6 +2,7 @@ import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Navigation } from './components/Navigation/Navigation';
 import { NotFound } from './components/NotFound/NotFound';
+import { Loader } from './components/Loader/Loader';
 import { searchMovies } from './api/fetchMovies';
 
 const HomePage = lazy(() =>
@@ -17,6 +18,8 @@ const MovieDetailsPage = lazy(() =>
 const App = () => {
   const [movies, setMovies] = useState([]);
   const [query, setQuery] = useState(null);
+  const [status, setStatus] = useState('idle');
+  const [loadTime, setLoadTime] = useState(null);
 
   const handleQuery = query => {
     setQuery(query);
@@ -26,7 +29,16 @@ const App = () => {
     if (query < 1) {
       return;
     }
-    searchMovies(query).then(setMovies);
+    setStatus('pending');
+    const startLoad = new Date();
+    searchMovies(query)
+      .then(setMovies)
+      .then(() => {
+        setStatus('idle');
+        const finishLoad = new Date();
+        const time = finishLoad - startLoad;
+        setLoadTime(time);
+      });
   }, [query]);
 
   const resetSearch = useCallback(() => {
@@ -37,16 +49,21 @@ const App = () => {
   return (
     <>
       <Navigation />
-      <Suspense fallback={<h1>Downloading...</h1>}>
+      {status === 'pending' && loadTime > 100 && <Loader />}
+      <Suspense fallback={<p style={{ color: 'transparent' }}>Loading...</p>}>
         <Switch>
           <Route path="/" exact>
-            <HomePage resetSearch={resetSearch} />
+            <HomePage
+              resetSearch={resetSearch}
+              setStatus={setStatus}
+              setLoadTime={setLoadTime}
+            />
           </Route>
           <Route path="/movies" exact>
             <MoviesPage handleQuery={handleQuery} movies={movies} />
           </Route>
           <Route path="/movies/:movieId">
-            <MovieDetailsPage />
+            <MovieDetailsPage setStatus={setStatus} setLoadTime={setLoadTime} />
           </Route>
           <Route>
             <NotFound />

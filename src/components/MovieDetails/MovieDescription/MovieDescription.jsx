@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 const MovieDescription = ({
   title,
   releaseYear,
@@ -27,6 +29,14 @@ const MovieDescription = ({
       </div>
     </>
   );
+};
+
+MovieDescription.propTypes = {
+  title: PropTypes.string,
+  releaseYear: PropTypes.number,
+  userScore: PropTypes.number,
+  overview: PropTypes.string,
+  genres: PropTypes.string,
 };
 
 export { MovieDescription };

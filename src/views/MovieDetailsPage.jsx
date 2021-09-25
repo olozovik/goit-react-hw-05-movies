@@ -14,10 +14,12 @@ import { MovieDescription } from '../components/MovieDetails/MovieDescription/Mo
 import { AdditionalInfo } from '../components/MovieDetails/AdditionalInfo/AdditionalInfo';
 import { Cast } from '../components/MovieDetails/Cast/Cast';
 import { Reviews } from '../components/MovieDetails/Reviews/Reviews';
+import noPhoto from 'assets/images/no_photo.png';
+import PropTypes from 'prop-types';
 
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500/';
 
-const MovieDetailsPage = () => {
+const MovieDetailsPage = ({ setStatus, setLoadTime }) => {
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState(null);
   const [releaseYear, setReleaseYear] = useState(null);
@@ -25,7 +27,7 @@ const MovieDetailsPage = () => {
   const [overview, setOverView] = useState(null);
   const [genres, setGenres] = useState(null);
   const [cast, setCast] = useState(null);
-  const [reviews, setReviews] = useState(null);
+  const [reviews, setReviews] = useState([]);
 
   const { movieId } = useParams();
   const { path } = useRouteMatch();
@@ -33,6 +35,8 @@ const MovieDetailsPage = () => {
   const history = useHistory();
 
   useEffect(() => {
+    setStatus('pending');
+    const startLoad = new Date();
     getMovieDetails(Number(movieId)).then(data => {
       const {
         poster_path,
@@ -52,8 +56,12 @@ const MovieDetailsPage = () => {
       setGenres(genres.map(genre => genre.name).join(', '));
       setCast(credits.cast);
       setReviews(reviews.results);
+      setStatus('idle');
+      const finishLoad = new Date();
+      const time = finishLoad - startLoad;
+      setLoadTime(time);
     });
-  }, [movieId]);
+  }, [movieId, setStatus, setLoadTime]);
 
   const onGoBackClick = () => {
     history.push(location?.state?.from ?? '/');
@@ -65,7 +73,10 @@ const MovieDetailsPage = () => {
         Go back
       </button>
       <MainContent>
-        <MovieImage url={image && `${imgBaseUrl}${image}`} />
+        <MovieImage
+          url={image ? `${imgBaseUrl}${image}` : noPhoto}
+          title={title}
+        />
         <MovieDescription
           title={title}
           releaseYear={releaseYear}
@@ -83,6 +94,11 @@ const MovieDetailsPage = () => {
       </Route>
     </Container>
   );
+};
+
+MovieDetailsPage.propTypes = {
+  setStatus: PropTypes.func.isRequired,
+  setLoadTime: PropTypes.func.isRequired,
 };
 
 export default MovieDetailsPage;

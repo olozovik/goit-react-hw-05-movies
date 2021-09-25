@@ -1,6 +1,7 @@
 import { Container } from '../components/Container/Container';
 import { useEffect, useState } from 'react';
 import { MoviesList } from '../components/MoviesList/MoviesList';
+import PropTypes from 'prop-types';
 
 const MoviesPage = ({ handleQuery, movies }) => {
   const [query, setQuery] = useState(null);
@@ -27,6 +28,11 @@ const MoviesPage = ({ handleQuery, movies }) => {
       <MoviesList movies={movies} />
     </Container>
   );
+};
+
+MoviesPage.propTypes = {
+  handleQuery: PropTypes.func.isRequired,
+  movies: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default MoviesPage;
