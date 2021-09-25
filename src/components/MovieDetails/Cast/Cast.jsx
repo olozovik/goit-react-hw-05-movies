@@ -1,28 +1,35 @@
-import { Thumb } from './Cast.styled';
+import { Character, Item, List, Name, Thumb } from './Cast.styled';
 import noPhoto from 'assets/images/no_photo.png';
 import PropTypes from 'prop-types';
+import { Container } from '../../Container/Container';
 
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500/';
 
 const Cast = ({ cast }) => {
   return cast ? (
-    cast.map((item, idx) => {
-      const { name, profile_path, character } = item;
-      return (
-        <li key={idx}>
-          <Thumb>
-            <img
-              src={profile_path ? `${imgBaseUrl}${profile_path}` : noPhoto}
-              alt={name}
-            />
-          </Thumb>
-          <p>{name}</p>
-          <p>Character: {character}</p>
-        </li>
-      );
-    })
+    <Container>
+      <List>
+        {cast.map((item, idx) => {
+          const { name, profile_path, character } = item;
+          return (
+            <Item key={idx}>
+              <Thumb>
+                <img
+                  src={profile_path ? `${imgBaseUrl}${profile_path}` : noPhoto}
+                  alt={name}
+                />
+              </Thumb>
+              <Name>{name}</Name>
+              {character && <Character>Character: {character}</Character>}
+            </Item>
+          );
+        })}
+      </List>
+    </Container>
   ) : (
-    <p>There are no actors to show.</p>
+    <Container>
+      <p>There are no actors to show.</p>
+    </Container>
   );
 };
 

@@ -1,20 +1,26 @@
 import PropTypes from 'prop-types';
+import { Container } from '../../Container/Container';
+import { Item, List, Name } from './Reviews.styled';
 
 const Reviews = ({ reviews }) => {
   return reviews.length ? (
-    <ul>
-      {reviews.map((review, idx) => {
-        const { author, content } = review;
-        return (
-          <li key={idx}>
-            <h4>Author: {author}</h4>
-            <p>{content}</p>
-          </li>
-        );
-      })}
-    </ul>
+    <Container>
+      <List>
+        {reviews.map((review, idx) => {
+          const { author, content } = review;
+          return (
+            <Item key={idx}>
+              <Name>Author: {author}</Name>
+              <p>{content}</p>
+            </Item>
+          );
+        })}
+      </List>
+    </Container>
   ) : (
-    <p>We don't have any reviews for this movie.</p>
+    <Container>
+      <p>We don't have any reviews for this movie.</p>
+    </Container>
   );
 };
 

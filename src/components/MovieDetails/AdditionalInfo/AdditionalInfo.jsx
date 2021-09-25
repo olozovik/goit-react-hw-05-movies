@@ -1,19 +1,29 @@
-import { Link, useRouteMatch } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
+import {
+  Wrapper,
+  Item,
+  LinkStyled,
+  List,
+  Title,
+} from './AdditionalInfo.styled';
+import { Container } from '../../Container/Container';
 
 const AdditionalInfo = () => {
   const { url } = useRouteMatch();
   return (
-    <>
-      <p>Additional information:</p>
-      <ul>
-        <li>
-          <Link to={`${url}/cast`}>Cast</Link>
-        </li>
-        <li>
-          <Link to={`${url}/reviews`}>Reviews</Link>
-        </li>
-      </ul>
-    </>
+    <Wrapper>
+      <Container>
+        <Title>Additional information:</Title>
+        <List>
+          <Item>
+            <LinkStyled to={`${url}/cast`}>Cast</LinkStyled>
+          </Item>
+          <Item>
+            <LinkStyled to={`${url}/reviews`}>Reviews</LinkStyled>
+          </Item>
+        </List>
+      </Container>
+    </Wrapper>
   );
 };
 

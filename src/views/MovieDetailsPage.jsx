@@ -70,23 +70,26 @@ const MovieDetailsPage = ({ setStatus, setLoadTime }) => {
   };
 
   return (
-    <Container>
+    <>
       <MainContentWrapper>
-        <ButtonGoBack onClick={onGoBackClick} />
-        <MainContent>
-          <MovieImage
-            url={image ? `${imgBaseUrl}${image}` : noPhoto}
-            title={title}
-          />
-          <MovieDescription
-            title={title}
-            releaseYear={releaseYear}
-            userScore={userScore}
-            overview={overview}
-            genres={genres}
-          />
-        </MainContent>
+        <Container>
+          <ButtonGoBack onClick={onGoBackClick} />
+          <MainContent>
+            <MovieImage
+              url={image ? `${imgBaseUrl}${image}` : noPhoto}
+              title={title}
+            />
+            <MovieDescription
+              title={title}
+              releaseYear={releaseYear}
+              userScore={userScore}
+              overview={overview}
+              genres={genres}
+            />
+          </MainContent>
+        </Container>
       </MainContentWrapper>
+
       <AdditionalInfo />
       <Route path={`${path}/cast`}>
         <Cast cast={cast} />
@@ -94,7 +97,7 @@ const MovieDetailsPage = ({ setStatus, setLoadTime }) => {
       <Route path={`${path}/reviews`}>
         <Reviews reviews={reviews} />
       </Route>
-    </Container>
+    </>
   );
 };
 
