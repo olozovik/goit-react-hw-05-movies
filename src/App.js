@@ -4,6 +4,7 @@ import { Navigation } from './components/Navigation/Navigation';
 import { NotFound } from './components/NotFound/NotFound';
 import { Loader } from './components/Loader/Loader';
 import { searchMovies } from './api/fetchMovies';
+import { Header } from './components/Header/Header';
 
 const HomePage = lazy(() =>
   import('./views/HomePage' /* webpackChunkName: 'homePage' */),
@@ -48,7 +49,9 @@ const App = () => {
 
   return (
     <>
-      <Navigation />
+      <Header>
+        <Navigation />
+      </Header>
       {status === 'pending' && loadTime > 100 && <Loader />}
       <Suspense fallback={<p style={{ color: 'transparent' }}>Loading...</p>}>
         <Switch>

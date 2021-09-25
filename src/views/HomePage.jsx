@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { Container } from '../components/Container/Container';
 import { getMovies } from '../api/fetchMovies';
-import { useEffect, useState } from 'react';
 import { MoviesList } from '../components/MoviesList/MoviesList';
-import PropTypes from 'prop-types';
+import { HomeTitle } from '../components/HomeTitle/HomeTitle';
 
 const HomePage = ({ resetSearch, setStatus, setLoadTime }) => {
   const [movies, setMovies] = useState(null);
@@ -26,7 +27,7 @@ const HomePage = ({ resetSearch, setStatus, setLoadTime }) => {
 
   return (
     <Container>
-      <h1>Trending today</h1>
+      <HomeTitle>Trending today</HomeTitle>
       <MoviesList movies={movies} />
     </Container>
   );

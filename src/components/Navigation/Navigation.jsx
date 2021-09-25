@@ -1,19 +1,19 @@
 import { Container } from '../Container/Container';
-import { NavlinkStyled } from './Navigation.styled';
+import { Item, List, NavlinkStyled } from './Navigation.styled';
 
 const Navigation = () => {
   return (
     <Container>
-      <ul>
-        <li>
+      <List>
+        <Item>
           <NavlinkStyled to="/" exact>
             Home
           </NavlinkStyled>
-        </li>
-        <li>
+        </Item>
+        <Item>
           <NavlinkStyled to="/movies">Movies</NavlinkStyled>
-        </li>
-      </ul>
+        </Item>
+      </List>
     </Container>
   );
 };
