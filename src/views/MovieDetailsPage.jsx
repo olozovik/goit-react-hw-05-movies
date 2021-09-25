@@ -16,6 +16,8 @@ import { Cast } from '../components/MovieDetails/Cast/Cast';
 import { Reviews } from '../components/MovieDetails/Reviews/Reviews';
 import noPhoto from 'assets/images/no_photo.png';
 import PropTypes from 'prop-types';
+import { ButtonGoBack } from '../components/MovieDetails/ButtonGoBack/ButtonGoBack';
+import { MainContentWrapper } from '../components/MovieDetails/MainContentWrapper/MainContentWrapper';
 
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500/';
 
@@ -69,22 +71,22 @@ const MovieDetailsPage = ({ setStatus, setLoadTime }) => {
 
   return (
     <Container>
-      <button type="button" onClick={onGoBackClick}>
-        Go back
-      </button>
-      <MainContent>
-        <MovieImage
-          url={image ? `${imgBaseUrl}${image}` : noPhoto}
-          title={title}
-        />
-        <MovieDescription
-          title={title}
-          releaseYear={releaseYear}
-          userScore={userScore}
-          overview={overview}
-          genres={genres}
-        />
-      </MainContent>
+      <MainContentWrapper>
+        <ButtonGoBack onClick={onGoBackClick} />
+        <MainContent>
+          <MovieImage
+            url={image ? `${imgBaseUrl}${image}` : noPhoto}
+            title={title}
+          />
+          <MovieDescription
+            title={title}
+            releaseYear={releaseYear}
+            userScore={userScore}
+            overview={overview}
+            genres={genres}
+          />
+        </MainContent>
+      </MainContentWrapper>
       <AdditionalInfo />
       <Route path={`${path}/cast`}>
         <Cast cast={cast} />
