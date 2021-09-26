@@ -36,7 +36,8 @@ const App = () => {
     searchMovies(query)
       .then(data => {
         setMovies(data);
-        if (data.length === 0) toast.error('No films for this request');
+        if (data.length === 0)
+          toast.error('There are no films for this request');
       })
       .then(() => {
         setStatus('idle');
