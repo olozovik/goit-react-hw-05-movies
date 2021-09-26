@@ -3,7 +3,7 @@ import { Container } from '../Container/Container';
 const NotFound = () => {
   return (
     <Container>
-      <h1>404 Not Found</h1>
+      <h2>404 Not Found</h2>
     </Container>
   );
 };

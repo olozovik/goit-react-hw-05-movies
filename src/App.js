@@ -1,5 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 import { Navigation } from './components/Navigation/Navigation';
 import { NotFound } from './components/NotFound/NotFound';
 import { Loader } from './components/Loader/Loader';
@@ -18,7 +19,7 @@ const MovieDetailsPage = lazy(() =>
 
 const App = () => {
   const [movies, setMovies] = useState([]);
-  const [query, setQuery] = useState(null);
+  const [query, setQuery] = useState('');
   const [status, setStatus] = useState('idle');
   const [loadTime, setLoadTime] = useState(null);
 
@@ -33,7 +34,10 @@ const App = () => {
     setStatus('pending');
     const startLoad = new Date();
     searchMovies(query)
-      .then(setMovies)
+      .then(data => {
+        setMovies(data);
+        if (data.length === 0) toast.error('No films for this request');
+      })
       .then(() => {
         setStatus('idle');
         const finishLoad = new Date();
@@ -44,7 +48,7 @@ const App = () => {
 
   const resetSearch = useCallback(() => {
     setMovies([]);
-    setQuery(null);
+    setQuery('');
   }, []);
 
   return (
@@ -52,7 +56,7 @@ const App = () => {
       <Header>
         <Navigation />
       </Header>
-      {status === 'pending' && loadTime > 100 && <Loader />}
+      {status === 'pending' && loadTime > 300 && <Loader />}
       <Suspense fallback={<p style={{ color: 'transparent' }}>Loading...</p>}>
         <Switch>
           <Route path="/" exact>
@@ -63,7 +67,11 @@ const App = () => {
             />
           </Route>
           <Route path="/movies" exact>
-            <MoviesPage handleQuery={handleQuery} movies={movies} />
+            <MoviesPage
+              handleQuery={handleQuery}
+              movies={movies}
+              query={query}
+            />
           </Route>
           <Route path="/movies/:movieId">
             <MovieDetailsPage setStatus={setStatus} setLoadTime={setLoadTime} />
@@ -73,6 +81,7 @@ const App = () => {
           </Route>
         </Switch>
       </Suspense>
+      <Toaster />
     </>
   );
 };
