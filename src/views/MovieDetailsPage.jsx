@@ -21,7 +21,7 @@ import { MainContentWrapper } from '../components/MovieDetails/MainContentWrappe
 
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500/';
 
-const MovieDetailsPage = ({ setStatus, setLoadTime }) => {
+const MovieDetailsPage = ({ setStatus }) => {
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState(null);
   const [releaseYear, setReleaseYear] = useState(null);
@@ -38,7 +38,6 @@ const MovieDetailsPage = ({ setStatus, setLoadTime }) => {
 
   useEffect(() => {
     setStatus('pending');
-    const startLoad = new Date();
     getMovieDetails(Number(movieId)).then(data => {
       const {
         poster_path,
@@ -59,11 +58,8 @@ const MovieDetailsPage = ({ setStatus, setLoadTime }) => {
       setCast(credits.cast);
       setReviews(reviews.results);
       setStatus('idle');
-      const finishLoad = new Date();
-      const time = finishLoad - startLoad;
-      setLoadTime(time);
     });
-  }, [movieId, setStatus, setLoadTime]);
+  }, [movieId, setStatus]);
 
   const onGoBackClick = () => {
     history.push(location?.state?.from ?? '/');
@@ -103,7 +99,6 @@ const MovieDetailsPage = ({ setStatus, setLoadTime }) => {
 
 MovieDetailsPage.propTypes = {
   setStatus: PropTypes.func.isRequired,
-  setLoadTime: PropTypes.func.isRequired,
 };
 
 export default MovieDetailsPage;

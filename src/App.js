@@ -1,10 +1,9 @@
-import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { Navigation } from './components/Navigation/Navigation';
 import { NotFound } from './components/NotFound/NotFound';
 import { Loader } from './components/Loader/Loader';
-import { searchMovies } from './api/fetchMovies';
 import { Header } from './components/Header/Header';
 
 const HomePage = lazy(() =>
@@ -18,38 +17,10 @@ const MovieDetailsPage = lazy(() =>
 );
 
 const App = () => {
-  const [movies, setMovies] = useState([]);
-  const [query, setQuery] = useState('');
   const [status, setStatus] = useState('idle');
-  const [loadTime, setLoadTime] = useState(null);
 
-  const handleQuery = query => {
-    setQuery(query);
-  };
-
-  useEffect(() => {
-    if (query < 1) {
-      return;
-    }
-    setStatus('pending');
-    const startLoad = new Date();
-    searchMovies(query)
-      .then(data => {
-        setMovies(data);
-        if (data.length === 0)
-          toast.error('There are no films for this request');
-      })
-      .then(() => {
-        setStatus('idle');
-        const finishLoad = new Date();
-        const time = finishLoad - startLoad;
-        setLoadTime(time);
-      });
-  }, [query]);
-
-  const resetSearch = useCallback(() => {
-    setMovies([]);
-    setQuery('');
+  const changeStatus = useCallback(status => {
+    setStatus(status);
   }, []);
 
   return (
@@ -57,25 +28,17 @@ const App = () => {
       <Header>
         <Navigation />
       </Header>
-      {status === 'pending' && loadTime > 300 && <Loader />}
+      {status === 'pending' && <Loader />}
       <Suspense fallback={<p style={{ color: 'transparent' }}>Loading...</p>}>
         <Switch>
           <Route path="/" exact>
-            <HomePage
-              resetSearch={resetSearch}
-              setStatus={setStatus}
-              setLoadTime={setLoadTime}
-            />
+            <HomePage setStatus={changeStatus} />
           </Route>
           <Route path="/movies" exact>
-            <MoviesPage
-              handleQuery={handleQuery}
-              movies={movies}
-              query={query}
-            />
+            <MoviesPage setStatus={changeStatus} />
           </Route>
           <Route path="/movies/:movieId">
-            <MovieDetailsPage setStatus={setStatus} setLoadTime={setLoadTime} />
+            <MovieDetailsPage setStatus={changeStatus} />
           </Route>
           <Route>
             <NotFound />

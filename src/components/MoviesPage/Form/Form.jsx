@@ -14,7 +14,11 @@ const Form = ({ handleQuery }) => {
 
   const onSubmit = e => {
     e.preventDefault();
-    const value = e.target.query.value.trim();
+    const value = e.target.query.value
+      .trim()
+      .toLowerCase()
+      .split(' ')
+      .join('+');
     setQuery(value);
   };
 
