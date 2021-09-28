@@ -2,10 +2,30 @@ import { Character, Item, List, Name, Thumb } from './Cast.styled';
 import noPhoto from 'assets/images/no_photo.png';
 import PropTypes from 'prop-types';
 import { Container } from '../../Container/Container';
+import { getMovieCast } from '../../../api/fetchMovies';
+import { useRouteMatch } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500/';
 
-const Cast = ({ cast }) => {
+const Cast = ({ setStatus }) => {
+  const [movieId, setMovieId] = useState(null);
+  const [cast, setCast] = useState([]);
+
+  const { params } = useRouteMatch();
+
+  useEffect(() => {
+    setMovieId(params.movieId);
+  }, [params.movieId]);
+
+  useEffect(() => {
+    setStatus('pending');
+    getMovieCast(movieId).then(data => {
+      setCast(data);
+      setStatus('idle');
+    });
+  }, [movieId]);
+
   return cast ? (
     <Container>
       <List>
@@ -34,7 +54,7 @@ const Cast = ({ cast }) => {
 };
 
 Cast.propTypes = {
-  cast: PropTypes.arrayOf(PropTypes.object),
+  setStatus: PropTypes.func.isRequired,
 };
 
 export { Cast };

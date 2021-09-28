@@ -28,7 +28,7 @@ const searchMovies = async query => {
 const getMovieDetails = async id => {
   try {
     const data = await axios.get(
-      `${baseUrl}movie/${id}?api_key=${key}&language=en-US&append_to_response=reviews,credits`,
+      `${baseUrl}movie/${id}?api_key=${key}&language=en-US`,
     );
     return data.data;
   } catch (error) {
@@ -36,4 +36,28 @@ const getMovieDetails = async id => {
   }
 };
 
-export { getMovies, searchMovies, getMovieDetails };
+const getMovieCast = async id => {
+  try {
+    const data = await axios.get(
+      `${baseUrl}movie/${id}/credits?api_key=${key}&language=en-US`,
+    );
+    return data.data.cast;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getMovieReviews = async () => {
+  try {
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export {
+  getMovies,
+  searchMovies,
+  getMovieDetails,
+  getMovieCast,
+  getMovieReviews,
+};

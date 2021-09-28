@@ -28,8 +28,8 @@ const MovieDetailsPage = ({ setStatus }) => {
   const [userScore, setUserScore] = useState(null);
   const [overview, setOverView] = useState(null);
   const [genres, setGenres] = useState(null);
-  const [cast, setCast] = useState(null);
-  const [reviews, setReviews] = useState([]);
+  // const [cast, setCast] = useState(null);
+  // const [reviews, setReviews] = useState([]);
 
   const { movieId } = useParams();
   const { path } = useRouteMatch();
@@ -46,8 +46,8 @@ const MovieDetailsPage = ({ setStatus }) => {
         vote_average,
         overview,
         genres,
-        credits,
-        reviews,
+        // credits,
+        // reviews,
       } = data;
       setImage(poster_path);
       setTitle(title);
@@ -55,8 +55,8 @@ const MovieDetailsPage = ({ setStatus }) => {
       setUserScore(Math.round(Number(vote_average) * 10));
       setOverView(overview);
       setGenres(genres.map(genre => genre.name).join(', '));
-      setCast(credits.cast);
-      setReviews(reviews.results);
+      // setCast(credits.cast);
+      // setReviews(reviews.results);
       setStatus('idle');
     });
   }, [movieId, setStatus]);
@@ -85,13 +85,12 @@ const MovieDetailsPage = ({ setStatus }) => {
           </MainContent>
         </Container>
       </MainContentWrapper>
-
       <AdditionalInfo />
       <Route path={`${path}/cast`}>
-        <Cast cast={cast} />
+        <Cast setStatus={setStatus} />
       </Route>
       <Route path={`${path}/reviews`}>
-        <Reviews reviews={reviews} />
+        <Reviews setStatus={setStatus} />
       </Route>
     </>
   );
