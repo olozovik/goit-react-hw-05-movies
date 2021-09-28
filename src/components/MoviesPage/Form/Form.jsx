@@ -3,10 +3,10 @@ import { Button, FormStyled, Input } from './Form.styled';
 import PropTypes from 'prop-types';
 
 const Form = ({ handleQuery }) => {
-  const [query, setQuery] = useState(null);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
-    if (query < 1) {
+    if (query.length <= 1) {
       return;
     }
     handleQuery(query);
