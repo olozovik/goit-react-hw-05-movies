@@ -8,7 +8,7 @@ import {
 } from './AdditionalInfo.styled';
 import { Container } from '../../Container/Container';
 
-const AdditionalInfo = () => {
+const AdditionalInfo = ({ location }) => {
   const { url } = useRouteMatch();
   return (
     <Wrapper>
@@ -16,10 +16,18 @@ const AdditionalInfo = () => {
         <Title>Additional information:</Title>
         <List>
           <Item>
-            <LinkStyled to={`${url}/cast`}>Cast</LinkStyled>
+            <LinkStyled
+              to={{ pathname: `${url}/cast`, state: { from: location } }}
+            >
+              Cast
+            </LinkStyled>
           </Item>
           <Item>
-            <LinkStyled to={`${url}/reviews`}>Reviews</LinkStyled>
+            <LinkStyled
+              to={{ pathname: `${url}/reviews`, state: { from: location } }}
+            >
+              Reviews
+            </LinkStyled>
           </Item>
         </List>
       </Container>

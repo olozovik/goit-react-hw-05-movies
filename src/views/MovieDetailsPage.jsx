@@ -7,30 +7,29 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 import { getMovieDetails } from '../api/fetchMovies';
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { MovieImage } from '../components/MovieDetails/MovieImage/MovieImage';
 import { MainContent } from '../components/MovieDetails/MainContent/MainContent';
 import { MovieDescription } from '../components/MovieDetails/MovieDescription/MovieDescription';
 import { AdditionalInfo } from '../components/MovieDetails/AdditionalInfo/AdditionalInfo';
-import { Cast } from '../components/MovieDetails/Cast/Cast';
-import { Reviews } from '../components/MovieDetails/Reviews/Reviews';
 import noPhoto from 'assets/images/no_photo.png';
 import PropTypes from 'prop-types';
 import { ButtonGoBack } from '../components/MovieDetails/ButtonGoBack/ButtonGoBack';
 import { MainContentWrapper } from '../components/MovieDetails/MainContentWrapper/MainContentWrapper';
 
+const Cast = lazy(() =>
+  import('components/MovieDetails/Cast/Cast' /* webpackChunkName: 'cast' */),
+);
+const Reviews = lazy(() =>
+  import(
+    'components/MovieDetails/Reviews/Reviews' /* webpackChunkName: 'reviews' */
+  ),
+);
+
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500/';
 
 const MovieDetailsPage = ({ setStatus }) => {
-  const [image, setImage] = useState(null);
-  const [title, setTitle] = useState(null);
-  const [releaseYear, setReleaseYear] = useState(null);
-  const [userScore, setUserScore] = useState(null);
-  const [overview, setOverView] = useState(null);
-  const [genres, setGenres] = useState(null);
-  // const [cast, setCast] = useState(null);
-  // const [reviews, setReviews] = useState([]);
-
+  const [movie, setMovie] = useState({});
   const { movieId } = useParams();
   const { path } = useRouteMatch();
   const location = useLocation();
@@ -46,17 +45,19 @@ const MovieDetailsPage = ({ setStatus }) => {
         vote_average,
         overview,
         genres,
-        // credits,
-        // reviews,
       } = data;
-      setImage(poster_path);
-      setTitle(title);
-      setReleaseYear(Number.parseInt(release_date));
-      setUserScore(Math.round(Number(vote_average) * 10));
-      setOverView(overview);
-      setGenres(genres.map(genre => genre.name).join(', '));
-      // setCast(credits.cast);
-      // setReviews(reviews.results);
+      setMovie(p => ({ ...p, image: poster_path }));
+      setMovie(p => ({ ...p, title }));
+      setMovie(p => ({ ...p, releaseYear: Number.parseInt(release_date) }));
+      setMovie(p => ({
+        ...p,
+        userScore: Math.round(Number(vote_average) * 10),
+      }));
+      setMovie(p => ({ ...p, overview }));
+      setMovie(p => ({
+        ...p,
+        genres: genres.map(genre => genre.name).join(', '),
+      }));
       setStatus('idle');
     });
   }, [movieId, setStatus]);
@@ -65,6 +66,7 @@ const MovieDetailsPage = ({ setStatus }) => {
     history.push(location?.state?.from ?? '/');
   };
 
+  const { image, title, releaseYear, userScore, overview, genres } = movie;
   return (
     <>
       <MainContentWrapper>
@@ -85,7 +87,7 @@ const MovieDetailsPage = ({ setStatus }) => {
           </MainContent>
         </Container>
       </MainContentWrapper>
-      <AdditionalInfo />
+      <AdditionalInfo location={location?.state?.from} />
       <Route path={`${path}/cast`}>
         <Cast setStatus={setStatus} />
       </Route>

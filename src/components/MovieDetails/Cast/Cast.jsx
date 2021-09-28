@@ -19,12 +19,15 @@ const Cast = ({ setStatus }) => {
   }, [params.movieId]);
 
   useEffect(() => {
+    if (movieId === null) {
+      return;
+    }
     setStatus('pending');
     getMovieCast(movieId).then(data => {
       setCast(data);
       setStatus('idle');
     });
-  }, [movieId]);
+  }, [movieId, setStatus]);
 
   return cast ? (
     <Container>
@@ -57,4 +60,4 @@ Cast.propTypes = {
   setStatus: PropTypes.func.isRequired,
 };
 
-export { Cast };
+export default Cast;

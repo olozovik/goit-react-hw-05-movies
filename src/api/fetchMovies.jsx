@@ -47,8 +47,12 @@ const getMovieCast = async id => {
   }
 };
 
-const getMovieReviews = async () => {
+const getMovieReviews = async id => {
   try {
+    const data = await axios.get(
+      `${baseUrl}movie/${id}/reviews?api_key=${key}&language=en-US`,
+    );
+    return data.data.results;
   } catch (error) {
     console.log(error);
   }
