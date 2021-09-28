@@ -89,7 +89,9 @@ const MovieDetailsPage = ({ setStatus, status }) => {
           )}
         </Container>
       </MainContentWrapper>
-      <AdditionalInfo location={location?.state?.from} />
+      {status === 'resolved' && (
+        <AdditionalInfo location={location?.state?.from} />
+      )}
       <Route path={`${path}/cast`}>
         <Cast />
       </Route>
