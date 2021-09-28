@@ -32,13 +32,13 @@ const App = () => {
       <Suspense fallback={<p style={{ color: 'transparent' }}>Loading...</p>}>
         <Switch>
           <Route path="/" exact>
-            <HomePage setStatus={changeStatus} />
+            <HomePage setStatus={changeStatus} status={status} />
           </Route>
           <Route path="/movies" exact>
-            <MoviesPage setStatus={changeStatus} />
+            <MoviesPage setStatus={changeStatus} status={status} />
           </Route>
           <Route path="/movies/:movieId">
-            <MovieDetailsPage setStatus={changeStatus} />
+            <MovieDetailsPage setStatus={changeStatus} status={status} />
           </Route>
           <Route>
             <NotFound />

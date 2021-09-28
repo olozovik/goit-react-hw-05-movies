@@ -7,6 +7,7 @@ import {
   Title,
 } from './AdditionalInfo.styled';
 import { Container } from '../../Container/Container';
+import PropTypes from 'prop-types';
 
 const AdditionalInfo = ({ location }) => {
   const { url } = useRouteMatch();
@@ -33,6 +34,10 @@ const AdditionalInfo = ({ location }) => {
       </Container>
     </Wrapper>
   );
+};
+
+AdditionalInfo.propTypes = {
+  location: PropTypes.object,
 };
 
 export { AdditionalInfo };

@@ -1,4 +1,3 @@
-import { Container } from '../components/Container/Container';
 import {
   useHistory,
   useLocation,
@@ -8,12 +7,13 @@ import {
 } from 'react-router-dom';
 import { getMovieDetails } from '../api/fetchMovies';
 import { lazy, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { Container } from '../components/Container/Container';
 import { MovieImage } from '../components/MovieDetails/MovieImage/MovieImage';
 import { MainContent } from '../components/MovieDetails/MainContent/MainContent';
 import { MovieDescription } from '../components/MovieDetails/MovieDescription/MovieDescription';
 import { AdditionalInfo } from '../components/MovieDetails/AdditionalInfo/AdditionalInfo';
 import noPhoto from 'assets/images/no_photo.png';
-import PropTypes from 'prop-types';
 import { ButtonGoBack } from '../components/MovieDetails/ButtonGoBack/ButtonGoBack';
 import { MainContentWrapper } from '../components/MovieDetails/MainContentWrapper/MainContentWrapper';
 
@@ -28,7 +28,7 @@ const Reviews = lazy(() =>
 
 const imgBaseUrl = 'https://image.tmdb.org/t/p/w500/';
 
-const MovieDetailsPage = ({ setStatus }) => {
+const MovieDetailsPage = ({ setStatus, status }) => {
   const [movie, setMovie] = useState({});
   const { movieId } = useParams();
   const { path } = useRouteMatch();
@@ -58,7 +58,7 @@ const MovieDetailsPage = ({ setStatus }) => {
         ...p,
         genres: genres.map(genre => genre.name).join(', '),
       }));
-      setStatus('idle');
+      setStatus('resolved');
     });
   }, [movieId, setStatus]);
 
@@ -72,27 +72,29 @@ const MovieDetailsPage = ({ setStatus }) => {
       <MainContentWrapper>
         <Container>
           <ButtonGoBack onClick={onGoBackClick} />
-          <MainContent>
-            <MovieImage
-              url={image ? `${imgBaseUrl}${image}` : noPhoto}
-              title={title}
-            />
-            <MovieDescription
-              title={title}
-              releaseYear={releaseYear}
-              userScore={userScore}
-              overview={overview}
-              genres={genres}
-            />
-          </MainContent>
+          {status === 'resolved' && (
+            <MainContent>
+              <MovieImage
+                url={image ? `${imgBaseUrl}${image}` : noPhoto}
+                title={title}
+              />
+              <MovieDescription
+                title={title}
+                releaseYear={releaseYear}
+                userScore={userScore}
+                overview={overview}
+                genres={genres}
+              />
+            </MainContent>
+          )}
         </Container>
       </MainContentWrapper>
       <AdditionalInfo location={location?.state?.from} />
       <Route path={`${path}/cast`}>
-        <Cast setStatus={setStatus} />
+        <Cast />
       </Route>
       <Route path={`${path}/reviews`}>
-        <Reviews setStatus={setStatus} />
+        <Reviews />
       </Route>
     </>
   );
@@ -100,6 +102,7 @@ const MovieDetailsPage = ({ setStatus }) => {
 
 MovieDetailsPage.propTypes = {
   setStatus: PropTypes.func.isRequired,
+  status: PropTypes.func.isRequired,
 };
 
 export default MovieDetailsPage;

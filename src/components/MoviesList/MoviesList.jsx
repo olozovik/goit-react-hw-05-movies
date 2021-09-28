@@ -23,7 +23,7 @@ const MoviesList = ({ movies }) => {
 };
 
 MoviesList.propTypes = {
-  movie: PropTypes.arrayOf(PropTypes.object),
+  movies: PropTypes.arrayOf(PropTypes.object),
 };
 
 export { MoviesList };

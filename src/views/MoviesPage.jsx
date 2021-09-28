@@ -1,14 +1,14 @@
-import { Container } from '../components/Container/Container';
-import { MoviesList } from '../components/MoviesList/MoviesList';
-import PropTypes from 'prop-types';
-import { MoviesPageWrapper } from '../components/MoviesPage/MoviesPageWrapper';
-import { Form } from '../components/MoviesPage/Form/Form';
 import { useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { searchMovies } from '../api/fetchMovies';
+import PropTypes from 'prop-types';
 import toast from 'react-hot-toast';
+import { Container } from '../components/Container/Container';
+import { MoviesList } from '../components/MoviesList/MoviesList';
+import { MoviesPageWrapper } from '../components/MoviesPage/MoviesPageWrapper';
+import { Form } from '../components/MoviesPage/Form/Form';
+import { searchMovies } from '../api/fetchMovies';
 
-const MoviesPage = ({ setStatus }) => {
+const MoviesPage = ({ setStatus, status }) => {
   const location = useLocation();
   const history = useHistory();
   const locationRef = useRef(location);
@@ -45,7 +45,7 @@ const MoviesPage = ({ setStatus }) => {
         toast.error('There are no films for this request');
       }
       setMovies(data);
-      setStatus('idle');
+      setStatus('resolved');
     });
   }, [query, setStatus]);
 
@@ -53,7 +53,7 @@ const MoviesPage = ({ setStatus }) => {
     <MoviesPageWrapper>
       <Container>
         <Form handleQuery={handleQuery} />
-        <MoviesList movies={movies} />
+        {status === 'resolved' && <MoviesList movies={movies} />}
       </Container>
     </MoviesPageWrapper>
   );
@@ -61,6 +61,7 @@ const MoviesPage = ({ setStatus }) => {
 
 MoviesPage.propTypes = {
   setStatus: PropTypes.func.isRequired,
+  status: PropTypes.string.isRequired,
 };
 
 export default MoviesPage;
