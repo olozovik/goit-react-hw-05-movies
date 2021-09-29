@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const Wrapper = styled.div`
   padding: 20px 0;
@@ -21,8 +21,12 @@ const Item = styled.li`
   }
 `;
 
-const LinkStyled = styled(Link)`
+const LinkStyled = styled(NavLink)`
   color: #0000e0;
+
+  &.active {
+    color: #dca002;
+  }
 `;
 
 export { Wrapper, Title, List, Item, LinkStyled };
