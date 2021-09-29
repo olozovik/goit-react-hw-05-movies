@@ -104,7 +104,7 @@ const MovieDetailsPage = ({ setStatus, status }) => {
 
 MovieDetailsPage.propTypes = {
   setStatus: PropTypes.func.isRequired,
-  status: PropTypes.func.isRequired,
+  status: PropTypes.string.isRequired,
 };
 
 export default MovieDetailsPage;
