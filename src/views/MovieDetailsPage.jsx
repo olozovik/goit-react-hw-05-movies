@@ -38,26 +38,7 @@ const MovieDetailsPage = ({ setStatus, status }) => {
   useEffect(() => {
     setStatus('pending');
     getMovieDetails(Number(movieId)).then(data => {
-      const {
-        poster_path,
-        title,
-        release_date,
-        vote_average,
-        overview,
-        genres,
-      } = data;
-      setMovie(p => ({ ...p, image: poster_path }));
-      setMovie(p => ({ ...p, title }));
-      setMovie(p => ({ ...p, releaseYear: Number.parseInt(release_date) }));
-      setMovie(p => ({
-        ...p,
-        userScore: Math.round(Number(vote_average) * 10),
-      }));
-      setMovie(p => ({ ...p, overview }));
-      setMovie(p => ({
-        ...p,
-        genres: genres.map(genre => genre.name).join(', '),
-      }));
+      setMovie({ ...data });
       setStatus('resolved');
     });
   }, [movieId, setStatus]);
@@ -66,7 +47,8 @@ const MovieDetailsPage = ({ setStatus, status }) => {
     history.push(location?.state?.from ?? '/');
   };
 
-  const { image, title, releaseYear, userScore, overview, genres } = movie;
+  const { poster_path, title, release_date, vote_average, overview, genres } =
+    movie;
   return (
     <>
       <MainContentWrapper>
@@ -75,15 +57,15 @@ const MovieDetailsPage = ({ setStatus, status }) => {
           {status === 'resolved' && (
             <MainContent>
               <MovieImage
-                url={image ? `${imgBaseUrl}${image}` : noPhoto}
+                url={poster_path ? `${imgBaseUrl}${poster_path}` : noPhoto}
                 title={title}
               />
               <MovieDescription
                 title={title}
-                releaseYear={releaseYear}
-                userScore={userScore}
+                releaseYear={Number.parseInt(release_date)}
+                userScore={Math.round(Number(vote_average) * 10)}
                 overview={overview}
-                genres={genres}
+                genres={genres && genres.map(genre => genre.name).join(', ')}
               />
             </MainContent>
           )}

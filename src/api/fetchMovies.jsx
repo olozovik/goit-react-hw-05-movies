@@ -30,7 +30,9 @@ const getMovieDetails = async id => {
     const data = await axios.get(
       `${baseUrl}movie/${id}?api_key=${key}&language=en-US`,
     );
-    return data.data;
+    const { poster_path, title, release_date, vote_average, overview, genres } =
+      data.data;
+    return { poster_path, title, release_date, vote_average, overview, genres };
   } catch (error) {
     console.log(error.message);
   }
