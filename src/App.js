@@ -49,7 +49,7 @@ const App = () => {
         <Navigation />
       </Header>
       {status === 'pending' && loading === true && <Loader />}
-      <Suspense fallback={<p style={{ color: 'transparent' }}>Loading...</p>}>
+      <Suspense fallback={null}>
         <Switch>
           <Route path="/" exact>
             <HomePage setStatus={changeStatus} status={status} />
